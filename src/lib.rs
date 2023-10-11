@@ -1,8 +1,7 @@
 use proc_macro::TokenStream;
-
 use proc_macro2::{Literal, Span};
-
-use syn::{parse_macro_input, Lit, LitStr, __private::ToTokens};
+use quote::quote;
+use syn::{parse_macro_input, LitStr};
 
 /// Includes a UTF-8 encoded file from an URI as a string.
 ///
@@ -72,10 +71,10 @@ fn include_url(tokens: TokenStream, include_type: IncludeType) -> TokenStream {
     let input = parse_macro_input!(tokens as LitStr);
 
     match include_url_inner(&input.value(), include_type) {
-        Ok(mut res) => {
-            res.set_span(Span::call_site());
-            Lit::Verbatim(res).into_token_stream().into()
+        Ok(lit) => quote! {
+            #lit
         }
+        .into(),
         Err(e) => syn::Error::new(Span::call_site(), e)
             .into_compile_error()
             .into(),

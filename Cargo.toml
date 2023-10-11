@@ -1,6 +1,6 @@
 [package]
 name = "include_uri"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Marco Napetti"]
 repository = "https://github.com/nappa85/include_uri"
@@ -16,6 +16,17 @@ keywords = ["proc-macro", "include"]
 proc-macro = true
 
 [dependencies]
-proc-macro2 = { version = "1.0.47", default-features = false }
-reqwest = { version = "0.11.14", features = ["blocking"] }
-syn = { version = "1.0.107", default-features = false, features = ["printing"] }
+proc-macro2 = { version = "1.0.69", default-features = false }
+quote = { version = "1.0.33", default-features = false }
+reqwest = { version = "0.11.22", default-features = false, features = ["blocking"] }
+syn = { version = "2.0.38", default-features = false, features = ["parsing", "proc-macro"] }
+
+[features]
+default = ["rustls-tls-webpki-roots"]
+
+native-tls-alpn = ["reqwest/native-tls-alpn"]
+native-tls-vendored = ["reqwest/native-tls-vendored"]
+
+rustls-tls-manual-roots = ["reqwest/rustls-tls-manual-roots"]
+rustls-tls-webpki-roots = ["reqwest/rustls-tls-webpki-roots"]
+rustls-tls-native-roots = ["reqwest/rustls-tls-native-roots"]
